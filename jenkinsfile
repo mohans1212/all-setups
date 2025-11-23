@@ -1,0 +1,32 @@
+pipeline{
+    agent {
+        node{
+            label 'dev'
+        }
+    }
+    stages{
+        stage ('Code'){
+            steps{
+                git 'https://github.com/mohans1212/one.git'
+            }
+        }
+        stage ('build'){
+            tools {
+                maven 'mymaven'
+            }
+            steps{
+                sh 'mvn clean package'
+            }
+        }
+/*      stage ('Deploy'){
+            steps { 
+                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'tomcat free style', path: '', url: 'http://18.215.124.84:8080/')], contextPath: 'dev_ecommerce', war: 'target/*.war'
+            }
+        } */ 
+        stage ('Artifact'){
+            steps{
+                nexusArtifactUploader artifacts: [[artifactId: 'myweb', classifier: '', file: 'target/myweb-8.7.1.war', type: 'war']], credentialsId: 'nexus', groupId: 'in.javahome', nexusUrl: '52.4.95.50:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'myrepo', version: '8.7.1'
+            }
+        }
+    }
+}
