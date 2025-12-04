@@ -1,1 +1,30 @@
-##
+##Install anisble 
+yum install ansible -y
+
+#Python Pip Install
+yum install python-pip -y
+
+#root password update
+
+#persmission update
+vi /etc/ssh/sshd_config
+
+#restart sshd_config
+systemctl restart sshd
+
+#key gen
+ssh-keygen
+
+#key-copy
+ssh-copy-id root@172.31.28.201
+
+#path ( to create inventory)
+/etc/ansible/hosts
+
+#ping check
+ansible all -m ping
+
+
+ansible-playbook play.yml --tags "install,code"
+
+ansible-playbook play.yml --skip-tags install
